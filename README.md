@@ -1,5 +1,5 @@
 # Enclypt
-## Keep It Safe, Keep It Shared
+### Keep It Safe, Keep It Shared
 
 Enclypt is a secure file-sharing application designed to ensure the utmost protection of your documents through end-to-end encryption. It allows users to upload, share, and collaborate on files while maintaining complete control over access permissions. With a focus on user-friendly features and robust security, Enclypt guarantees safe sharing without compromising privacy.
 
