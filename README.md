@@ -26,8 +26,8 @@ Ensure you have the following installed:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repo/flask-encryptor.git
-   cd flask-encryptor
+   git clone https://github.com/your-repo/Enclypt.git
+   cd Enclypt
    ```
 2. **Create a Virtual Environment (Recommended)**:
    ```bash
