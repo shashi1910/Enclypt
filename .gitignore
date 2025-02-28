@@ -1,0 +1,11 @@
+# Ignore keys directory
+keys/
+
+# Ignore uploads directory
+uploads/
+
+# Ignore virtual environment
+venv/
+
+# Ignore log file
+encrypt.log

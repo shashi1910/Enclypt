@@ -1,0 +1,292 @@
+{% extends "base.html" %} {% block title %}File Encrypted - Enclypt{% endblock
+%} {% block content %}
+<section
+  class="page-header"
+  style="
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 1rem;
+    background-color: rgba(74, 111, 227, 0.1);
+    border-radius: var(--border-radius);
+  "
+>
+  <h1
+    style="color: var(--primary-color); font-size: 2rem; margin-bottom: 0.5rem"
+  >
+    File Encrypted Successfully
+  </h1>
+  <p style="color: var(--secondary-color); font-size: 1.1rem">
+    Your file has been encrypted and is ready for download
+  </p>
+</section>
+
+<section
+  class="success-section"
+  style="
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  "
+>
+  <div class="success-icon" style="text-align: center; margin-bottom: 1.5rem">
+    <i
+      class="fas fa-check-circle"
+      style="
+        font-size: 4rem;
+        color: var(--success-color);
+        animation: pulse 2s infinite;
+      "
+    ></i>
+  </div>
+
+  <div class="file-details" style="margin-bottom: 2rem">
+    <h2
+      style="
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.6rem;
+      "
+    >
+      Encryption Complete
+    </h2>
+
+    <div
+      style="
+        background-color: rgba(74, 111, 227, 0.05);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      "
+    >
+      <p style="margin-bottom: 0.75rem; font-size: 1.05rem">
+        Original file:
+        <strong style="color: var(--dark-color)"
+          >{{ original_filename }}</strong
+        >
+      </p>
+      <p style="font-size: 1.05rem">
+        Encrypted file:
+        <strong style="color: var(--primary-color)">{{ filename }}</strong>
+      </p>
+    </div>
+
+    <div
+      class="key-container"
+      style="
+        background-color: rgba(255, 193, 7, 0.1);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--warning-color);
+      "
+    >
+      <h3
+        style="
+          margin-top: 0;
+          color: #856404;
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        "
+      >
+        Your Encryption Key ID
+      </h3>
+      <div
+        class="key-display"
+        style="
+          display: flex;
+          align-items: center;
+          background-color: #f8f9fa;
+          border-radius: 4px;
+          padding: 0.75rem;
+          border: 1px solid #dee2e6;
+          margin-bottom: 1rem;
+        "
+      >
+        <code
+          id="key-value"
+          style="
+            flex-grow: 1;
+            font-family: monospace;
+            font-size: 1.1rem;
+            word-break: break-all;
+            color: #212529;
+          "
+          >{{ key_id }}</code
+        >
+        <button
+          id="copy-key-btn"
+          class="btn btn-small"
+          onclick="copyToClipboard('key-value')"
+          style="
+            background-color: var(--secondary-color);
+            margin-left: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            min-width: auto;
+            white-space: nowrap;
+          "
+        >
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+      <div
+        class="warning-box"
+        style="display: flex; align-items: flex-start; gap: 0.75rem"
+      >
+        <i
+          class="fas fa-exclamation-triangle"
+          style="
+            color: var(--warning-color);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+          "
+        ></i>
+        <p
+          style="
+            margin: 0;
+            color: #856404;
+            font-size: 0.95rem;
+            line-height: 1.5;
+          "
+        >
+          <strong>IMPORTANT:</strong> Save this key ID in a safe place. Without
+          it, you will NOT be able to decrypt your file.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="download-actions"
+      style="
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      "
+    >
+      <a
+        href="{{ url_for('download_file', filename=filename) }}"
+        class="btn btn-primary btn-large"
+        style="
+          background-color: var(--success-color);
+          font-size: 1.1rem;
+          padding: 0.75rem 1.5rem;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        "
+      >
+        <i class="fas fa-download"></i> Download Encrypted File
+      </a>
+      <a
+        href="{{ url_for('encrypt_page') }}"
+        class="btn btn-secondary"
+        style="
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        "
+      >
+        <i class="fas fa-redo"></i> Encrypt Another File
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="next-steps"
+    style="
+      background-color: rgba(23, 162, 184, 0.1);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      border-left: 4px solid var(--info-color);
+    "
+  >
+    <h3
+      style="
+        margin-top: 0;
+        color: #0c5460;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      "
+    >
+      Next Steps
+    </h3>
+    <ol style="margin: 0; padding-left: 1.5rem; color: #0c5460">
+      <li style="margin-bottom: 0.75rem">
+        Download your encrypted file and store it securely
+      </li>
+      <li style="margin-bottom: 0.75rem">
+        Save your encryption key ID somewhere safe (password manager
+        recommended)
+      </li>
+      <li>When you need to access your file, use the key ID to decrypt it</li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .download-actions {
+      flex-direction: row !important;
+    }
+
+    .download-actions a {
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    const textToCopy = element.textContent;
+
+    // Create a temporary element
+    const textarea = document.createElement("textarea");
+    textarea.value = textToCopy;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "absolute";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+
+    // Select and copy the text
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+
+    // Show feedback
+    const copyBtn = document.getElementById("copy-key-btn");
+    const originalText = copyBtn.innerHTML;
+    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    copyBtn.style.backgroundColor = "var(--success-color)";
+
+    // Reset button after 2 seconds
+    setTimeout(function () {
+      copyBtn.innerHTML = originalText;
+      copyBtn.style.backgroundColor = "var(--secondary-color)";
+    }, 2000);
+  }
+</script>
+{% endblock %}

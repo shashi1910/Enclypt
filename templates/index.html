@@ -1,0 +1,589 @@
+{% extends "base.html" %} {% block title %}Enclypt - Secure File Encryption{%
+endblock %} {% block content %}
+
+<section
+  class="hero"
+  style="
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    border-radius: 16px;
+    margin-bottom: 60px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  "
+>
+  <div class="hero-content" style="flex: 1; min-width: 300px; padding: 0 40px">
+    <h1
+      style="
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+        color: #2d3748;
+        line-height: 1.2;
+        font-weight: 700;
+      "
+    >
+      Secure Your Files with
+      <span style="color: var(--primary-color); position: relative"
+        >Enclypt<span
+          style="
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: rgba(74, 111, 227, 0.3);
+            border-radius: 2px;
+          "
+        ></span
+      ></span>
+    </h1>
+    <p
+      style="
+        font-size: 1.25rem;
+        margin-bottom: 30px;
+        color: #4a5568;
+        line-height: 1.6;
+        max-width: 540px;
+      "
+    >
+      End-to-end encryption for your sensitive documents and data, keeping your
+      information private and secure.
+    </p>
+    <div class="cta-buttons" style="display: flex; gap: 15px; flex-wrap: wrap">
+      <a
+        href="{{ url_for('encrypt_page') }}"
+        class="btn btn-primary"
+        style="
+          display: inline-block;
+          padding: 14px 28px;
+          background-color: var(--primary-color);
+          color: white;
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(74, 111, 227, 0.25);
+        "
+      >
+        <i class="fas fa-lock" style="margin-right: 8px"></i>Encrypt File
+      </a>
+      <a
+        href="{{ url_for('decrypt_page') }}"
+        class="btn btn-secondary"
+        style="
+          display: inline-block;
+          padding: 14px 28px;
+          background-color: white;
+          color: var(--primary-color);
+          text-decoration: none;
+          border-radius: 8px;
+          font-weight: 600;
+          font-size: 1.1rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          border: 2px solid var(--primary-color);
+        "
+      >
+        <i class="fas fa-unlock" style="margin-right: 8px"></i>Decrypt File
+      </a>
+    </div>
+  </div>
+  <div
+    class="hero-image"
+    style="
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    "
+  >
+    <img
+      src="{{ url_for('static', filename='img/hero-image.png') }}"
+      alt="Secure Encryption"
+      style="
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transform: perspective(1000px) rotateY(-5deg);
+        transition: all 0.5s ease;
+      "
+      onmouseover="this.style.transform='perspective(1000px) rotateY(0deg)'"
+      onmouseout="this.style.transform='perspective(1000px) rotateY(-5deg)'"
+    />
+  </div>
+</section>
+
+<section
+  class="features"
+  style="
+    padding: 40px 0 60px;
+    text-align: center;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-bottom: 60px;
+  "
+>
+  <h2
+    style="
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2d3748;
+      position: relative;
+      display: inline-block;
+    "
+  >
+    Why Choose Enclypt?
+    <span
+      style="
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 80px;
+        height: 4px;
+        background-color: var(--primary-color);
+        transform: translateX(-50%);
+        border-radius: 2px;
+      "
+    ></span>
+  </h2>
+
+  <div
+    class="feature-grid"
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      padding: 0 20px;
+    "
+  >
+    <div
+      class="feature-card"
+      style="
+        padding: 30px 20px;
+        border-radius: 12px;
+        background-color: #f8faff;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      "
+      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
+    >
+      <div
+        class="feature-icon"
+        style="
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+          color: var(--primary-color);
+          background-color: rgba(74, 111, 227, 0.1);
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          border-radius: 50%;
+          margin: 0 auto 25px;
+        "
+      >
+        <i class="fas fa-lock"></i>
+      </div>
+      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+        Secure Encryption
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        Files are encrypted using industry-standard Fernet symmetric encryption
+        for maximum security.
+      </p>
+    </div>
+
+    <div
+      class="feature-card"
+      style="
+        padding: 30px 20px;
+        border-radius: 12px;
+        background-color: #f8faff;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      "
+      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
+    >
+      <div
+        class="feature-icon"
+        style="
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+          color: var(--primary-color);
+          background-color: rgba(74, 111, 227, 0.1);
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          border-radius: 50%;
+          margin: 0 auto 25px;
+        "
+      >
+        <i class="fas fa-user-shield"></i>
+      </div>
+      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+        Privacy-Focused
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        Your encryption keys never leave your device. We don't store your files
+        or sensitive data.
+      </p>
+    </div>
+
+    <div
+      class="feature-card"
+      style="
+        padding: 30px 20px;
+        border-radius: 12px;
+        background-color: #f8faff;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      "
+      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
+    >
+      <div
+        class="feature-icon"
+        style="
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+          color: var(--primary-color);
+          background-color: rgba(74, 111, 227, 0.1);
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          border-radius: 50%;
+          margin: 0 auto 25px;
+        "
+      >
+        <i class="fas fa-bolt"></i>
+      </div>
+      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+        Fast & Reliable
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        Quick encryption and decryption process with minimal overhead for
+        efficient file security.
+      </p>
+    </div>
+
+    <div
+      class="feature-card"
+      style="
+        padding: 30px 20px;
+        border-radius: 12px;
+        background-color: #f8faff;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      "
+      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
+      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
+    >
+      <div
+        class="feature-icon"
+        style="
+          font-size: 2.5rem;
+          margin-bottom: 20px;
+          color: var(--primary-color);
+          background-color: rgba(74, 111, 227, 0.1);
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          border-radius: 50%;
+          margin: 0 auto 25px;
+        "
+      >
+        <i class="fas fa-desktop"></i>
+      </div>
+      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+        Easy to Use
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        Simple, intuitive interface that makes encryption accessible to
+        everyone, no technical expertise required.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section
+  class="how-it-works"
+  style="
+    padding: 50px 30px 70px;
+    text-align: center;
+    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  "
+>
+  <h2
+    style="
+      font-size: 2.2rem;
+      margin-bottom: 50px;
+      color: #2d3748;
+      position: relative;
+      display: inline-block;
+    "
+  >
+    How It Works
+    <span
+      style="
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 80px;
+        height: 4px;
+        background-color: var(--primary-color);
+        transform: translateX(-50%);
+        border-radius: 2px;
+      "
+    ></span>
+  </h2>
+
+  <div
+    class="steps"
+    style="
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    "
+  >
+    <!-- Connector line -->
+    <div
+      style="
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 4px;
+        background-color: rgba(74, 111, 227, 0.2);
+        z-index: 0;
+      "
+    ></div>
+
+    <div
+      class="step"
+      style="
+        flex: 1;
+        min-width: 240px;
+        max-width: 300px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      "
+    >
+      <div
+        class="step-number"
+        style="
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          background-color: var(--primary-color);
+          color: white;
+          border-radius: 50%;
+          font-size: 1.8rem;
+          font-weight: bold;
+          margin: 0 auto 25px;
+          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
+        "
+      >
+        1
+      </div>
+      <div
+        class="step-content"
+        style="
+          background-color: white;
+          padding: 25px 20px;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+          height: 100%;
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+          Upload Your File
+        </h3>
+        <p style="color: #4a5568; line-height: 1.6">
+          Select any file you want to encrypt from your device with our simple
+          drag-and-drop interface.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="step"
+      style="
+        flex: 1;
+        min-width: 240px;
+        max-width: 300px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      "
+    >
+      <div
+        class="step-number"
+        style="
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          background-color: var(--primary-color);
+          color: white;
+          border-radius: 50%;
+          font-size: 1.8rem;
+          font-weight: bold;
+          margin: 0 auto 25px;
+          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
+        "
+      >
+        2
+      </div>
+      <div
+        class="step-content"
+        style="
+          background-color: white;
+          padding: 25px 20px;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+          height: 100%;
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+          Get Your Encryption Key
+        </h3>
+        <p style="color: #4a5568; line-height: 1.6">
+          Enclypt generates a unique secure key for your file that only you can
+          access.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="step"
+      style="
+        flex: 1;
+        min-width: 240px;
+        max-width: 300px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      "
+    >
+      <div
+        class="step-number"
+        style="
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          background-color: var(--primary-color);
+          color: white;
+          border-radius: 50%;
+          font-size: 1.8rem;
+          font-weight: bold;
+          margin: 0 auto 25px;
+          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
+        "
+      >
+        3
+      </div>
+      <div
+        class="step-content"
+        style="
+          background-color: white;
+          padding: 25px 20px;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+          height: 100%;
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+          Download Encrypted File
+        </h3>
+        <p style="color: #4a5568; line-height: 1.6">
+          Your file is now securely encrypted and ready to be stored or shared
+          safely.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="step"
+      style="
+        flex: 1;
+        min-width: 240px;
+        max-width: 300px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+      "
+    >
+      <div
+        class="step-number"
+        style="
+          width: 80px;
+          height: 80px;
+          line-height: 80px;
+          background-color: var(--primary-color);
+          color: white;
+          border-radius: 50%;
+          font-size: 1.8rem;
+          font-weight: bold;
+          margin: 0 auto 25px;
+          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
+        "
+      >
+        4
+      </div>
+      <div
+        class="step-content"
+        style="
+          background-color: white;
+          padding: 25px 20px;
+          border-radius: 12px;
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+          height: 100%;
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+          Decrypt When Needed
+        </h3>
+        <p style="color: #4a5568; line-height: 1.6">
+          Use your key to decrypt the file whenever you need access to your
+          original content.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="{{ url_for('encrypt_page') }}"
+    style="
+      display: inline-block;
+      margin-top: 50px;
+      padding: 16px 32px;
+      background-color: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 15px rgba(74, 111, 227, 0.25);
+    "
+  >
+    <i class="fas fa-shield-alt" style="margin-right: 8px"></i>Start Encrypting
+    Now
+  </a>
+</section>
+
+{% endblock %}

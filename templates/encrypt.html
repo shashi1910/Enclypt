@@ -1,0 +1,314 @@
+{% extends "base.html" %} {% block title %}Encrypt Your Files - Enclypt{%
+endblock %} {% block content %}
+<section
+  class="page-header"
+  style="
+    text-align: center;
+    padding: 40px 20px 50px;
+    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    border-radius: 16px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  "
+>
+  <h1
+    style="
+      color: #2d3748;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    "
+  >
+    Encrypt Your Files
+  </h1>
+  <p
+    style="
+      color: #4a5568;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    "
+  >
+    Upload a file to securely encrypt it with Enclypt's advanced encryption
+    technology
+  </p>
+</section>
+
+<section
+  class="encrypt-section"
+  style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 60px"
+>
+  <div
+    class="upload-container"
+    style="
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    "
+  >
+    <form
+      action="{{ url_for('upload_file') }}"
+      method="post"
+      enctype="multipart/form-data"
+      id="upload-form"
+    >
+      <div
+        class="file-upload-area"
+        id="drop-area"
+        style="
+          border: 2px dashed #cbd5e0;
+          border-radius: 12px;
+          padding: 40px 20px;
+          text-align: center;
+          margin-bottom: 25px;
+          background-color: #f8faff;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        "
+        onmouseover="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#f0f5ff';"
+        onmouseout="this.style.borderColor='#cbd5e0'; this.style.backgroundColor='#f8faff';"
+      >
+        <input
+          type="file"
+          name="file"
+          id="file-input"
+          class="file-input"
+          style="display: none"
+          onchange="updateFileName(this)"
+        />
+        <label
+          for="file-input"
+          class="file-label"
+          style="display: block; cursor: pointer"
+        >
+          <i
+            class="fas fa-cloud-upload-alt"
+            style="
+              font-size: 3rem;
+              color: var(--primary-color);
+              margin-bottom: 15px;
+              display: block;
+            "
+          ></i>
+          <span
+            id="file-name"
+            style="font-size: 1.1rem; color: #4a5568; font-weight: 500"
+            >Choose a file or drag it here</span
+          >
+        </label>
+        <p
+          class="file-info"
+          style="margin-top: 15px; color: #718096; font-size: 0.9rem"
+        >
+          Maximum file size: 16MB
+        </p>
+      </div>
+
+      <div style="text-align: center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-large"
+          style="
+            background-color: var(--primary-color);
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 111, 227, 0.25);
+          "
+          onmouseover="this.style.backgroundColor='#3a5cd4'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(74, 111, 227, 0.3)';"
+          onmouseout="this.style.backgroundColor='var(--primary-color)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(74, 111, 227, 0.25)';"
+        >
+          <i class="fas fa-lock" style="margin-right: 8px"></i> Encrypt File
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div
+    class="encryption-info"
+    style="
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    "
+  >
+    <h2
+      style="
+        color: #2d3748;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+      "
+    >
+      About File Encryption
+    </h2>
+    <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.6">
+      When you encrypt a file with Enclypt:
+    </p>
+    <ul
+      style="
+        color: #4a5568;
+        padding-left: 20px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+      "
+    >
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Secure Encryption</span
+        >
+        - Your file is encrypted using secure symmetric encryption (Fernet)
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Unique Key</span
+        >
+        - You'll receive a unique encryption key that you must save to decrypt
+        later
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Privacy Focused</span
+        >
+        - The original file is not stored on our servers
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Safe Sharing</span
+        >
+        - The encrypted file can be safely stored or shared
+      </li>
+    </ul>
+    <div
+      class="warning-box"
+      style="
+        background-color: rgba(246, 173, 85, 0.1);
+        border-left: 4px solid #f6ad55;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+      "
+    >
+      <i
+        class="fas fa-exclamation-triangle"
+        style="font-size: 1.5rem; color: #ed8936; margin-top: 2px"
+      ></i>
+      <p style="margin: 0; color: #4a5568; line-height: 1.6">
+        <strong style="color: #ed8936">Important:</strong> If you lose your
+        encryption key, your file cannot be recovered! Keep your key in a safe
+        place.
+      </p>
+    </div>
+
+    <div
+      style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0"
+    >
+      <h3 style="color: #2d3748; font-size: 1.3rem; margin-bottom: 15px">
+        Need Help?
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        If you're having trouble or want to learn more about our encryption
+        technology, visit our
+        <a
+          href="{{ url_for('about') }}"
+          style="
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-color);
+          "
+          >About page</a
+        >
+        or check out our
+        <a
+          href="#"
+          style="
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-color);
+          "
+          >FAQ</a
+        >.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Function to update the displayed file name
+  function updateFileName(input) {
+    const fileName = input.files[0]
+      ? input.files[0].name
+      : "Choose a file or drag it here";
+    document.getElementById("file-name").textContent = fileName;
+
+    // Add visual confirmation
+    const dropArea = document.getElementById("drop-area");
+    dropArea.style.borderColor = "var(--primary-color)";
+    dropArea.style.backgroundColor = "#eef4ff";
+
+    // Add a checkmark icon if a file is selected
+    if (input.files[0]) {
+      document.getElementById("file-name").innerHTML =
+        '<i class="fas fa-check" style="color: #48bb78; margin-right: 8px;"></i> ' +
+        fileName;
+    }
+  }
+
+  // Add drag and drop functionality
+  const dropArea = document.getElementById("drop-area");
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ["dragenter", "dragover"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, highlight, false);
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+  });
+
+  function highlight() {
+    dropArea.style.borderColor = "var(--primary-color)";
+    dropArea.style.backgroundColor = "#eef4ff";
+    dropArea.style.borderStyle = "solid";
+  }
+
+  function unhighlight() {
+    dropArea.style.borderColor = "#cbd5e0";
+    dropArea.style.backgroundColor = "#f8faff";
+    dropArea.style.borderStyle = "dashed";
+  }
+
+  dropArea.addEventListener("drop", handleDrop, false);
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    const fileInput = document.getElementById("file-input");
+    fileInput.files = files;
+    updateFileName(fileInput);
+  }
+</script>
+{% endblock %}

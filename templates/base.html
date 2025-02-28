@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}Enclypt - Secure File Encryption{% endblock %}
+    </title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.ico') }}"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #4a6fe3;
+        --secondary-color: #6c757d;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+        --info-color: #17a2b8;
+        --border-radius: 8px;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-color);
+        background-color: #f5f7fc;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* Header Styles */
+      header {
+        background-color: white;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 15px 0;
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      /* Hamburger menu styles */
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 21px;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      .hamburger span {
+        display: block;
+        height: 3px;
+        width: 100%;
+        background-color: var(--primary-color);
+        border-radius: 3px;
+        transition: var(--transition);
+      }
+
+      /* Navigation Styles */
+      nav ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav ul li {
+        margin-left: 25px;
+      }
+
+      nav ul li a {
+        text-decoration: none;
+        color: var(--secondary-color);
+        font-weight: 500;
+        transition: var(--transition);
+        padding: 8px 12px;
+        border-radius: 4px;
+      }
+
+      nav ul li a:hover {
+        color: var(--primary-color);
+        background-color: rgba(74, 111, 227, 0.1);
+      }
+
+      /* Main Content Styles */
+      main {
+        min-height: calc(100vh - 160px);
+        padding: 40px 0;
+      }
+
+      /* Alert Styles */
+      .alert {
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: var(--border-radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .alert-success {
+        background-color: rgba(40, 167, 69, 0.15);
+        border-left: 4px solid var(--success-color);
+        color: #155724;
+      }
+
+      .alert-danger {
+        background-color: rgba(220, 53, 69, 0.15);
+        border-left: 4px solid var(--danger-color);
+        color: #721c24;
+      }
+
+      .alert-warning {
+        background-color: rgba(255, 193, 7, 0.15);
+        border-left: 4px solid var(--warning-color);
+        color: #856404;
+      }
+
+      .alert-info {
+        background-color: rgba(23, 162, 184, 0.15);
+        border-left: 4px solid var(--info-color);
+        color: #0c5460;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: inherit;
+        opacity: 0.7;
+        transition: var(--transition);
+      }
+
+      .close-btn:hover {
+        opacity: 1;
+      }
+
+      /* Card Styles (For content blocks) */
+      .card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        padding: 30px;
+        margin-bottom: 30px;
+        transition: var(--transition);
+      }
+
+      .card:hover {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      /* Button Styles */
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+        transition: var(--transition);
+        text-align: center;
+      }
+
+      .btn:hover {
+        background-color: #3a5cd4;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: var(--secondary-color);
+      }
+
+      .btn-secondary:hover {
+        background-color: #5a6268;
+      }
+
+      /* Footer Styles */
+      footer {
+        background-color: white;
+        padding: 20px 0;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      footer .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .social-links a {
+        color: var(--secondary-color);
+        margin-left: 15px;
+        font-size: 1.2rem;
+        transition: var(--transition);
+      }
+
+      .social-links a:hover {
+        color: var(--primary-color);
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+        }
+
+        /* Animated hamburger menu (X transformation) */
+        .hamburger.active span:nth-child(1) {
+          transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+          transform: translateY(-9px) rotate(-45deg);
+        }
+
+        nav {
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 70%;
+          max-width: 300px;
+          height: 100vh;
+          background-color: white;
+          box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+          transition: 0.3s ease-in-out;
+          z-index: 1000;
+          padding-top: 80px;
+        }
+
+        nav.active {
+          right: 0;
+        }
+
+        nav ul {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        nav ul li {
+          margin: 15px 0;
+          width: 100%;
+          text-align: center;
+        }
+
+        nav ul li a {
+          display: block;
+          padding: 12px 15px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease-in-out;
+          z-index: 999;
+        }
+
+        .overlay.active {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        footer .container {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .social-links {
+          margin-top: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <a href="{{ url_for('index') }}">
+            <img
+              src="{{ url_for('static', filename='img/logo.svg') }}"
+              alt="Enclypt Logo"
+              style="width: 160px; height: auto; margin-right: 10px"
+            />
+          </a>
+        </div>
+        <!-- Hamburger Menu Button -->
+        <div class="hamburger" id="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <!-- Overlay for mobile menu background -->
+        <div class="overlay" id="overlay"></div>
+        <nav id="nav-menu">
+          <ul>
+            <li>
+              <a
+                href="{{ url_for('index') }}"
+                style="{% if request.path == url_for('index') %}color: var(--primary-color); background-color: rgba(74, 111, 227, 0.1);{% endif %}"
+                ><i class="fas fa-home" style="margin-right: 5px"></i>Home</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ url_for('encrypt_page') }}"
+                style="{% if request.path == url_for('encrypt_page') %}color: var(--primary-color); background-color: rgba(74, 111, 227, 0.1);{% endif %}"
+                ><i class="fas fa-lock" style="margin-right: 5px"></i>Encrypt</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ url_for('decrypt_page') }}"
+                style="{% if request.path == url_for('decrypt_page') %}color: var(--primary-color); background-color: rgba(74, 111, 227, 0.1);{% endif %}"
+                ><i class="fas fa-unlock" style="margin-right: 5px"></i
+                >Decrypt</a
+              >
+            </li>
+            <li>
+              <a
+                href="{{ url_for('about') }}"
+                style="{% if request.path == url_for('about') %}color: var(--primary-color); background-color: rgba(74, 111, 227, 0.1);{% endif %}"
+                ><i class="fas fa-info-circle" style="margin-right: 5px"></i
+                >About</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }}"
+          style="animation: fadeIn 0.3s ease"
+        >
+          {{ message }}
+          <button
+            class="close-btn"
+            onclick="this.parentElement.style.display='none';"
+          >
+            &times;
+          </button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %} {% block content %}
+        <div class="card">
+          <h1
+            style="
+              color: var(--primary-color);
+              margin-top: 0;
+              font-size: 2.2rem;
+              text-align: center;
+            "
+          >
+            Welcome to Enclypt
+          </h1>
+          <p
+            style="
+              text-align: center;
+              font-size: 1.1rem;
+              color: var(--secondary-color);
+              margin-bottom: 30px;
+            "
+          >
+            Secure file encryption made simple
+          </p>
+
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 20px;
+              flex-wrap: wrap;
+              margin-top: 30px;
+            "
+          >
+            <a
+              href="{{ url_for('encrypt_page') }}"
+              class="btn"
+              style="min-width: 180px"
+            >
+              <i class="fas fa-lock" style="margin-right: 8px"></i> Encrypt
+              Files
+            </a>
+            <a
+              href="{{ url_for('decrypt_page') }}"
+              class="btn btn-secondary"
+              style="min-width: 180px"
+            >
+              <i class="fas fa-unlock" style="margin-right: 8px"></i> Decrypt
+              Files
+            </a>
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p style="margin: 0; color: var(--secondary-color)">
+          &copy; 2025 Enclypt. All rights reserved.
+        </p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for mobile menu functionality -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburger-menu');
+        const navMenu = document.getElementById('nav-menu');
+        const overlay = document.getElementById('overlay');
+        const navLinks = document.querySelectorAll('nav ul li a');
+        
+        // Toggle menu when hamburger is clicked
+        hamburger.addEventListener('click', function() {
+          hamburger.classList.toggle('active');
+          navMenu.classList.toggle('active');
+          overlay.classList.toggle('active');
+          document.body.classList.toggle('no-scroll'); // Prevent scrolling when menu is open
+        });
+        
+        // Close menu when overlay is clicked
+        overlay.addEventListener('click', function() {
+          hamburger.classList.remove('active');
+          navMenu.classList.remove('active');
+          overlay.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+        });
+        
+        // Close menu when a link is clicked
+        navLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

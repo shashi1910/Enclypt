@@ -1,0 +1,343 @@
+{% extends "base.html" %} {% block title %}Decrypt Your Files - Enclypt{%
+endblock %} {% block content %}
+<section
+  class="page-header"
+  style="
+    text-align: center;
+    padding: 40px 20px 50px;
+    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    border-radius: 16px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  "
+>
+  <h1
+    style="
+      color: #2d3748;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    "
+  >
+    Decrypt Your Files
+  </h1>
+  <p
+    style="
+      color: #4a5568;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    "
+  >
+    Upload an encrypted file and provide your key to decrypt it
+  </p>
+</section>
+
+<section
+  class="decrypt-section"
+  style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 60px"
+>
+  <div
+    class="upload-container"
+    style="
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    "
+  >
+    <form
+      action="{{ url_for('decrypt_file') }}"
+      method="post"
+      enctype="multipart/form-data"
+      id="decrypt-form"
+    >
+      <div
+        class="file-upload-area"
+        id="drop-area-decrypt"
+        style="
+          border: 2px dashed #cbd5e0;
+          border-radius: 12px;
+          padding: 40px 20px;
+          text-align: center;
+          margin-bottom: 25px;
+          background-color: #f8faff;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        "
+        onmouseover="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#f0f5ff';"
+        onmouseout="this.style.borderColor='#cbd5e0'; this.style.backgroundColor='#f8faff';"
+      >
+        <input
+          type="file"
+          name="file"
+          id="file-input-decrypt"
+          class="file-input"
+          style="display: none"
+          onchange="updateFileName(this)"
+        />
+        <label
+          for="file-input-decrypt"
+          class="file-label"
+          style="display: block; cursor: pointer"
+        >
+          <i
+            class="fas fa-file-upload"
+            style="
+              font-size: 3rem;
+              color: var(--primary-color);
+              margin-bottom: 15px;
+              display: block;
+            "
+          ></i>
+          <span
+            id="file-name-decrypt"
+            style="font-size: 1.1rem; color: #4a5568; font-weight: 500"
+            >Choose an encrypted file (.enc)</span
+          >
+        </label>
+        <p
+          class="file-info"
+          style="margin-top: 15px; color: #718096; font-size: 0.9rem"
+        >
+          Only encrypted files from Enclypt can be decrypted
+        </p>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 25px">
+        <label
+          for="key-id"
+          style="
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+          "
+          >Encryption Key ID:</label
+        >
+        <input
+          type="text"
+          name="key_id"
+          id="key-id"
+          placeholder="Enter your encryption key ID"
+          required
+          style="
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.borderColor='var(--primary-color)';"
+          onmouseout="this.style.borderColor='#cbd5e0';"
+          onfocus="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='0 0 0 3px rgba(74, 111, 227, 0.2)';"
+          onblur="this.style.borderColor='#cbd5e0'; this.style.boxShadow='none';"
+        />
+      </div>
+
+      <div style="text-align: center">
+        <button
+          type="submit"
+          class="btn btn-primary btn-large"
+          style="
+            background-color: var(--primary-color);
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 111, 227, 0.25);
+          "
+          onmouseover="this.style.backgroundColor='#3a5cd4'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 15px rgba(74, 111, 227, 0.3)';"
+          onmouseout="this.style.backgroundColor='var(--primary-color)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(74, 111, 227, 0.25)';"
+        >
+          <i class="fas fa-unlock" style="margin-right: 8px"></i> Decrypt File
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div
+    class="decryption-info"
+    style="
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    "
+  >
+    <h2
+      style="
+        color: #2d3748;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 10px;
+      "
+    >
+      About File Decryption
+    </h2>
+    <p style="color: #4a5568; margin-bottom: 15px; line-height: 1.6">
+      To decrypt a file with Enclypt:
+    </p>
+    <ul
+      style="
+        color: #4a5568;
+        padding-left: 20px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+      "
+    >
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >File Format</span
+        >
+        - You need the encrypted file (.enc extension)
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Correct Key</span
+        >
+        - You must provide the exact encryption key ID used during encryption
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Secure Process</span
+        >
+        - The decryption happens in your browser for maximum security
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
+          >Immediate Access</span
+        >
+        - The decrypted file will be available for download immediately
+      </li>
+    </ul>
+    <div
+      class="warning-box"
+      style="
+        background-color: rgba(66, 153, 225, 0.1);
+        border-left: 4px solid #4299e1;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+      "
+    >
+      <i
+        class="fas fa-info-circle"
+        style="font-size: 1.5rem; color: #4299e1; margin-top: 2px"
+      ></i>
+      <p style="margin: 0; color: #4a5568; line-height: 1.6">
+        <strong style="color: #4299e1">Note:</strong> Only files encrypted with
+        Enclypt can be decrypted with this tool. Make sure you have the correct
+        key ID before attempting decryption.
+      </p>
+    </div>
+
+    <!-- <div
+      style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0"
+    >
+      <h3 style="color: #2d3748; font-size: 1.3rem; margin-bottom: 15px">
+        Lost Your Key?
+      </h3>
+      <p style="color: #4a5568; line-height: 1.6">
+        If you've lost your encryption key, visit our
+        <a
+          href="{{ url_for('about') }}"
+          style="
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-color);
+          "
+          >About page</a
+        >
+        for recovery options or contact our
+        <a
+          href="#"
+          style="
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary-color);
+          "
+          >Support Team</a
+        >.
+      </p>
+    </div> -->
+  </div>
+</section>
+
+<script>
+  // Function to update the displayed file name
+  function updateFileName(input) {
+    const fileName = input.files[0]
+      ? input.files[0].name
+      : "Choose an encrypted file (.enc)";
+    document.getElementById("file-name-decrypt").textContent = fileName;
+
+    // Add visual confirmation
+    const dropArea = document.getElementById("drop-area-decrypt");
+    dropArea.style.borderColor = "var(--primary-color)";
+    dropArea.style.backgroundColor = "#eef4ff";
+
+    // Add a checkmark icon if a file is selected
+    if (input.files[0]) {
+      document.getElementById("file-name-decrypt").innerHTML =
+        '<i class="fas fa-check" style="color: #48bb78; margin-right: 8px;"></i> ' +
+        fileName;
+    }
+  }
+
+  // Add drag and drop functionality
+  const dropArea = document.getElementById("drop-area-decrypt");
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ["dragenter", "dragover"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, highlight, false);
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+  });
+
+  function highlight() {
+    dropArea.style.borderColor = "var(--primary-color)";
+    dropArea.style.backgroundColor = "#eef4ff";
+    dropArea.style.borderStyle = "solid";
+  }
+
+  function unhighlight() {
+    dropArea.style.borderColor = "#cbd5e0";
+    dropArea.style.backgroundColor = "#f8faff";
+    dropArea.style.borderStyle = "dashed";
+  }
+
+  dropArea.addEventListener("drop", handleDrop, false);
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    const fileInput = document.getElementById("file-input-decrypt");
+    fileInput.files = files;
+    updateFileName(fileInput);
+  }
+</script>
+{% endblock %}
