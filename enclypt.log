@@ -2104,3 +2104,5 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'.
 2025-02-28 22:48:55,744 - werkzeug - INFO - 127.0.0.1 - - [28/Feb/2025 22:48:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 2025-02-28 22:48:55,745 - werkzeug - INFO - 127.0.0.1 - - [28/Feb/2025 22:48:55] "[36mGET /static/img/logo.svg HTTP/1.1[0m" 304 -
 2025-02-28 22:48:55,847 - werkzeug - INFO - 127.0.0.1 - - [28/Feb/2025 22:48:55] "GET /encrypt HTTP/1.1" 200 -
+2025-02-28 22:54:25,244 - werkzeug - WARNING -  * Debugger is active!
+2025-02-28 22:54:25,250 - werkzeug - INFO -  * Debugger PIN: 902-627-057
