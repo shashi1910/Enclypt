@@ -98,7 +98,5 @@ flask-encryptor/
 
 This project is licensed under the MIT License.
 
-## Author
 
-Shashi Pargaonkar
 
