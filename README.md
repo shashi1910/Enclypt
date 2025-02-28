@@ -1,12 +1,104 @@
-# Enclypt
-### Keep It Safe, Keep It Shared
+# Project Enclypt
 
-Enclypt is a secure file-sharing application designed to ensure the utmost protection of your documents through end-to-end encryption. It allows users to upload, share, and collaborate on files while maintaining complete control over access permissions. With a focus on user-friendly features and robust security, Enclypt guarantees safe sharing without compromising privacy.
+## Overview
 
-# Features
+This is a Flask-based web application that allows users to securely encrypt and decrypt files using the **Fernet** symmetric encryption algorithm. The app provides an intuitive web interface for file uploads, encryption, decryption, and secure downloads.
 
-- **End-to-End Encryption**: Encrypt files on the client-side before uploading, ensuring that even the server cannot access file content.
-- **User Authentication**: Secure login and registration using JWT or OAuth, with role-based access controls.
-- **File Sharing**: Share files securely through encrypted links, with options for expiration or single-use.
-- **Integrity & Digital Signatures**: Verify file authenticity and integrity using SHA-256 hashing and RSA/ECDSA signatures.
-- **Cloud Integration**: Store encrypted files on cloud storage providers like AWS, GCP, or Azure.
+## Features
+
+- **File Encryption**: Upload a file and encrypt it using a unique key.
+- **File Decryption**: Upload an encrypted file and decrypt it using the correct key.
+- **Automatic Key Generation & Storage**: Generates a new key for each encryption and securely stores it.
+- **Secure File Handling**: Uses secure filenames and enforces size restrictions (max 16MB).
+- **Error Handling**: Provides user-friendly error messages for invalid operations.
+- **Logging**: Maintains logs of encryption and decryption activities.
+
+## Installation
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- Python 3.7+
+- pip (Python package manager)
+
+### Setup
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-repo/flask-encryptor.git
+   cd flask-encryptor
+   ```
+2. **Create a Virtual Environment (Recommended)**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Set Up Environment Variables**:
+   Create a `.env` file and define:
+   ```
+   SECRET_KEY=your_random_secret_key
+   PORT=7500  # Optional, defaults to 7500
+   ```
+5. **Run the Application**:
+   ```bash
+   python app.py
+   ```
+6. Open your browser and navigate to:
+   ```
+   http://127.0.0.1:7500
+   ```
+
+## Usage
+
+### Encrypt a File
+
+1. Navigate to the **Encrypt** page.
+2. Upload a file (max 16MB).
+3. The app generates an encrypted file and provides a unique key.
+4. Download the encrypted file and securely save the key.
+
+### Decrypt a File
+
+1. Navigate to the **Decrypt** page.
+2. Upload the encrypted file.
+3. Enter the correct key.
+4. Download the decrypted file.
+
+## File Storage Structure
+
+```
+flask-encryptor/
+│── app.py  # Main Flask application
+│── requirements.txt  # Dependencies
+│── templates/  # HTML templates
+│── static/  # Static files (CSS, JS)
+│── uploads/  # Stores encrypted/decrypted files
+│── keys/  # Stores encryption keys
+│── logs/  # Stores logs
+```
+
+## Security Considerations
+
+- **Key Management**: Keys are stored in the `keys/` folder. Users must securely store their key ID to decrypt files.
+- **Size Restrictions**: Files larger than 16MB are not allowed to prevent DoS attacks.
+- **Logging**: Logs are maintained for security monitoring.
+
+## Future Improvements
+
+- Implement scheduled cleanup for temporary files.
+- Add user authentication for secure file handling.
+- Use a database for better key management.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Author
+
+Shashi Pargaonkar
+
