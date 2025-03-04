@@ -104,14 +104,138 @@ endblock %} {% block content %}
           class="file-info"
           style="margin-top: 15px; color: #718096; font-size: 0.9rem"
         >
-          Maximum file size: 16MB
+          Maximum file size: 50MB
         </p>
+      </div>
+
+      <!-- New password protection section -->
+      <div
+        class="password-protection"
+        style="
+          background-color: #f8faff;
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 25px;
+          border: 1px solid #e2e8f0;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+          "
+        >
+          <label
+            for="enable-password"
+            style="
+              font-weight: 600;
+              color: #2d3748;
+              display: flex;
+              align-items: center;
+            "
+          >
+            <i
+              class="fas fa-key"
+              style="margin-right: 10px; color: var(--primary-color)"
+            ></i>
+            Password Protection
+          </label>
+          <label
+            class="switch"
+            style="
+              position: relative;
+              display: inline-block;
+              width: 50px;
+              height: 24px;
+            "
+          >
+            <input
+              type="checkbox"
+              id="enable-password"
+              onchange="togglePasswordField(this)"
+            />
+            <span
+              class="slider"
+              style="
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #cbd5e0;
+                transition: 0.4s;
+                border-radius: 24px;
+              "
+            ></span>
+          </label>
+        </div>
+
+        <div id="password-field-container" style="display: none">
+          <input
+            type="password"
+            name="password"
+            id="password-field"
+            placeholder="Enter password for encryption"
+            style="
+              width: 100%;
+              padding: 12px;
+              border: 1px solid #cbd5e0;
+              border-radius: 8px;
+              font-size: 1rem;
+              transition: all 0.3s ease;
+              margin-bottom: 10px;
+            "
+            onkeyup="validatePassword()"
+          />
+          <input
+            type="password"
+            id="confirm-password-field"
+            placeholder="Confirm password"
+            style="
+              width: 100%;
+              padding: 12px;
+              border: 1px solid #cbd5e0;
+              border-radius: 8px;
+              font-size: 1rem;
+              transition: all 0.3s ease;
+            "
+            onkeyup="validatePassword()"
+          />
+          <div
+            id="password-strength"
+            style="margin-top: 10px; font-size: 0.9rem; color: #718096"
+          ></div>
+          <div
+            id="password-match"
+            style="
+              margin-top: 5px;
+              font-size: 0.9rem;
+              color: #718096;
+              display: none;
+            "
+          ></div>
+          <p
+            style="
+              margin-top: 10px;
+              color: #718096;
+              font-size: 0.9rem;
+              font-style: italic;
+            "
+          >
+            <i class="fas fa-info-circle" style="margin-right: 5px"></i>
+            You'll need this password along with the key to decrypt your file.
+          </p>
+        </div>
       </div>
 
       <div style="text-align: center">
         <button
           type="submit"
           class="btn btn-primary btn-large"
+          id="encrypt-button"
           style="
             background-color: var(--primary-color);
             padding: 14px 32px;
@@ -181,6 +305,12 @@ endblock %} {% block content %}
       </li>
       <li style="margin-bottom: 10px">
         <span style="color: var(--primary-color); font-weight: 600"
+          >Password Protection</span
+        >
+        - Add an extra layer of security with password protection (optional)
+      </li>
+      <li style="margin-bottom: 10px">
+        <span style="color: var(--primary-color); font-weight: 600"
           >Privacy Focused</span
         >
         - The original file is not stored on our servers
@@ -210,12 +340,12 @@ endblock %} {% block content %}
       ></i>
       <p style="margin: 0; color: #4a5568; line-height: 1.6">
         <strong style="color: #ed8936">Important:</strong> If you lose your
-        encryption key, your file cannot be recovered! Keep your key in a safe
-        place.
+        encryption key or password, your file cannot be recovered! Keep your key
+        and password in a safe place.
       </p>
     </div>
 
-    <div
+    <!-- <div
       style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0"
     >
       <h3 style="color: #2d3748; font-size: 1.3rem; margin-bottom: 15px">
@@ -244,7 +374,7 @@ endblock %} {% block content %}
           >FAQ</a
         >.
       </p>
-    </div>
+    </div> -->
   </div>
 </section>
 
@@ -266,6 +396,95 @@ endblock %} {% block content %}
       document.getElementById("file-name").innerHTML =
         '<i class="fas fa-check" style="color: #48bb78; margin-right: 8px;"></i> ' +
         fileName;
+    }
+  }
+
+  // Function to toggle password field visibility
+  function togglePasswordField(checkbox) {
+    const passwordContainer = document.getElementById(
+      "password-field-container"
+    );
+    if (checkbox.checked) {
+      passwordContainer.style.display = "block";
+    } else {
+      passwordContainer.style.display = "none";
+      document.getElementById("password-field").value = "";
+      document.getElementById("confirm-password-field").value = "";
+      document.getElementById("password-strength").innerHTML = "";
+      document.getElementById("password-match").style.display = "none";
+    }
+  }
+
+  // Function to validate password strength and matching
+  function validatePassword() {
+    const passwordField = document.getElementById("password-field");
+    const confirmField = document.getElementById("confirm-password-field");
+    const passwordStrength = document.getElementById("password-strength");
+    const passwordMatch = document.getElementById("password-match");
+    const encryptButton = document.getElementById("encrypt-button");
+
+    // Check if password field has value
+    if (passwordField.value.length > 0) {
+      // Check password strength
+      let strength = 0;
+
+      // Length check
+      if (passwordField.value.length >= 8) strength += 1;
+
+      // Character variety checks
+      if (/[A-Z]/.test(passwordField.value)) strength += 1;
+      if (/[a-z]/.test(passwordField.value)) strength += 1;
+      if (/[0-9]/.test(passwordField.value)) strength += 1;
+      if (/[^A-Za-z0-9]/.test(passwordField.value)) strength += 1;
+
+      // Display strength message
+      let strengthMessage = "";
+      let strengthColor = "";
+
+      switch (strength) {
+        case 0:
+        case 1:
+          strengthMessage = "Weak password";
+          strengthColor = "#e53e3e"; // Red
+          break;
+        case 2:
+        case 3:
+          strengthMessage = "Moderate password";
+          strengthColor = "#ed8936"; // Orange
+          break;
+        case 4:
+        case 5:
+          strengthMessage = "Strong password";
+          strengthColor = "#48bb78"; // Green
+          break;
+      }
+
+      passwordStrength.innerHTML = `<i class="fas fa-shield-alt" style="margin-right: 5px;"></i> ${strengthMessage}`;
+      passwordStrength.style.color = strengthColor;
+
+      // Check if passwords match
+      if (confirmField.value.length > 0) {
+        passwordMatch.style.display = "block";
+
+        if (passwordField.value === confirmField.value) {
+          passwordMatch.innerHTML =
+            '<i class="fas fa-check" style="margin-right: 5px;"></i> Passwords match';
+          passwordMatch.style.color = "#48bb78"; // Green
+          encryptButton.disabled = false;
+        } else {
+          passwordMatch.innerHTML =
+            '<i class="fas fa-times" style="margin-right: 5px;"></i> Passwords do not match';
+          passwordMatch.style.color = "#e53e3e"; // Red
+          encryptButton.disabled = true;
+        }
+      } else {
+        passwordMatch.style.display = "none";
+        encryptButton.disabled = false;
+      }
+    } else {
+      passwordStrength.innerHTML = "";
+      passwordMatch.style.display = "none";
+      encryptButton.disabled = false;
     }
   }
 
@@ -310,5 +529,72 @@ endblock %} {% block content %}
     fileInput.files = files;
     updateFileName(fileInput);
   }
+
+  // Add event listener for form submission
+  document
+    .getElementById("upload-form")
+    .addEventListener("submit", function (e) {
+      const fileInput = document.getElementById("file-input");
+      const passwordCheckbox = document.getElementById("enable-password");
+      const passwordField = document.getElementById("password-field");
+      const confirmField = document.getElementById("confirm-password-field");
+
+      // Check if file is selected
+      if (!fileInput.files[0]) {
+        e.preventDefault();
+        alert("Please select a file to encrypt.");
+        return false;
+      }
+
+      // Check if password protection is enabled but passwords don't match
+      if (
+        passwordCheckbox.checked &&
+        passwordField.value !== confirmField.value
+      ) {
+        e.preventDefault();
+        alert("Passwords do not match.");
+        return false;
+      }
+
+      // If all validations pass, show loading state
+      document.getElementById("encrypt-button").innerHTML =
+        '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Encrypting...';
+      document.getElementById("encrypt-button").disabled = true;
+
+      return true;
+    });
 </script>
+
+<style>
+  /* Toggle switch style */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: var(--primary-color);
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--primary-color);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+</style>
 {% endblock %}

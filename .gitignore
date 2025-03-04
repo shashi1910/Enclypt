@@ -1,11 +1,13 @@
-# Ignore keys directory
-keys/
+# Ignore Python cache files
+__pycache__/
+*.pyc
 
-# Ignore uploads directory
+# Ignore sensitive files and directories
 uploads/
-
-# Ignore virtual environment
+keys/
 venv/
+enclypt.log
+.env
 
-# Ignore log file
-encrypt.log
+# Ignore Flask app instance files
+instance/

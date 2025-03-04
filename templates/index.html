@@ -1,50 +1,310 @@
 {% extends "base.html" %} {% block title %}Enclypt - Secure File Encryption{%
 endblock %} {% block content %}
 
+<style>
+  :root {
+    --primary-color: #4a6fe3;
+    --primary-light: rgba(74, 111, 227, 0.1);
+    --primary-medium: rgba(74, 111, 227, 0.3);
+    --text-dark: #2d3748;
+    --text-medium: #4a5568;
+    --bg-gradient: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    --btn-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Global Styles */
+  .section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .underline-highlight {
+    position: relative;
+  }
+
+  .underline-highlight::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background-color: var(--primary-medium);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  .underline-highlight.visible::after {
+    width: 100%;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 28px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(74, 111, 227, 0.4);
+  }
+
+  .btn:hover::after {
+    height: 100%;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(74, 111, 227, 0.25);
+  }
+
+  .btn-secondary {
+    background-color: white;
+    color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--primary-color);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--primary-light);
+  }
+
+  .feature-card {
+    padding: 30px 20px;
+    border-radius: 12px;
+    background-color: #f8faff;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(
+      180deg,
+      var(--primary-light) 0%,
+      transparent 100%
+    );
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--hover-shadow);
+  }
+
+  .feature-card:hover::before {
+    height: 100%;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    background-color: var(--primary-light);
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    transition: all 0.5s ease;
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: rotateY(180deg);
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 240px;
+    max-width: 300px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .step-number {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0 auto 25px;
+    box-shadow: var(--btn-shadow);
+    transition: all 0.5s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step:hover .step-number {
+    transform: scale(1.1);
+  }
+
+  .step-content {
+    background-color: white;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    transition: all 0.5s ease;
+  }
+
+  .step:hover .step-content {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+  }
+</style>
+
 <section
-  class="hero"
+  class="hero section"
   style="
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     padding: 60px 0;
-    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    background: var(--bg-gradient);
     border-radius: 16px;
     margin-bottom: 60px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--card-shadow);
   "
 >
-  <div class="hero-content" style="flex: 1; min-width: 300px; padding: 0 40px">
+  <div
+    class="hero-content"
+    style="
+      flex: 1;
+      min-width: 300px;
+      padding: 0 40px;
+      animation: slideInLeft 1s ease forwards;
+    "
+  >
     <h1
       style="
         font-size: 2.8rem;
         margin-bottom: 20px;
-        color: #2d3748;
+        color: var(--text-dark);
         line-height: 1.2;
         font-weight: 700;
       "
     >
       Secure Your Files with
-      <span style="color: var(--primary-color); position: relative"
-        >Enclypt<span
-          style="
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: rgba(74, 111, 227, 0.3);
-            border-radius: 2px;
-          "
-        ></span
-      ></span>
+      <span
+        class="underline-highlight"
+        style="color: var(--primary-color); position: relative"
+        >Enclypt</span
+      >
     </h1>
     <p
       style="
         font-size: 1.25rem;
         margin-bottom: 30px;
-        color: #4a5568;
+        color: var(--text-medium);
         line-height: 1.6;
         max-width: 540px;
       "
@@ -53,41 +313,10 @@ endblock %} {% block content %}
       information private and secure.
     </p>
     <div class="cta-buttons" style="display: flex; gap: 15px; flex-wrap: wrap">
-      <a
-        href="{{ url_for('encrypt_page') }}"
-        class="btn btn-primary"
-        style="
-          display: inline-block;
-          padding: 14px 28px;
-          background-color: var(--primary-color);
-          color: white;
-          text-decoration: none;
-          border-radius: 8px;
-          font-weight: 600;
-          font-size: 1.1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(74, 111, 227, 0.25);
-        "
-      >
+      <a href="{{ url_for('encrypt_page') }}" class="btn btn-primary">
         <i class="fas fa-lock" style="margin-right: 8px"></i>Encrypt File
       </a>
-      <a
-        href="{{ url_for('decrypt_page') }}"
-        class="btn btn-secondary"
-        style="
-          display: inline-block;
-          padding: 14px 28px;
-          background-color: white;
-          color: var(--primary-color);
-          text-decoration: none;
-          border-radius: 8px;
-          font-weight: 600;
-          font-size: 1.1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-          border: 2px solid var(--primary-color);
-        "
-      >
+      <a href="{{ url_for('decrypt_page') }}" class="btn btn-secondary">
         <i class="fas fa-unlock" style="margin-right: 8px"></i>Decrypt File
       </a>
     </div>
@@ -100,6 +329,7 @@ endblock %} {% block content %}
       display: flex;
       justify-content: center;
       padding: 20px;
+      animation: slideInRight 1s ease forwards;
     "
   >
     <img
@@ -111,22 +341,22 @@ endblock %} {% block content %}
         border-radius: 12px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
         transform: perspective(1000px) rotateY(-5deg);
-        transition: all 0.5s ease;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       "
-      onmouseover="this.style.transform='perspective(1000px) rotateY(0deg)'"
-      onmouseout="this.style.transform='perspective(1000px) rotateY(-5deg)'"
+      onmouseover="this.style.transform='perspective(1000px) rotateY(0deg) scale(1.05)'"
+      onmouseout="this.style.transform='perspective(1000px) rotateY(-5deg) scale(1)'"
     />
   </div>
 </section>
 
 <section
-  class="features"
+  class="features section"
   style="
     padding: 40px 0 60px;
     text-align: center;
     background-color: white;
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--card-shadow);
     margin-bottom: 60px;
   "
 >
@@ -134,24 +364,13 @@ endblock %} {% block content %}
     style="
       font-size: 2.2rem;
       margin-bottom: 50px;
-      color: #2d3748;
+      color: var(--text-dark);
       position: relative;
       display: inline-block;
     "
+    class="underline-highlight"
   >
     Why Choose Enclypt?
-    <span
-      style="
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        width: 80px;
-        height: 4px;
-        background-color: var(--primary-color);
-        transform: translateX(-50%);
-        border-radius: 2px;
-      "
-    ></span>
   </h2>
 
   <div
@@ -163,149 +382,61 @@ endblock %} {% block content %}
       padding: 0 20px;
     "
   >
-    <div
-      class="feature-card"
-      style="
-        padding: 30px 20px;
-        border-radius: 12px;
-        background-color: #f8faff;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      "
-      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
-      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
-    >
-      <div
-        class="feature-icon"
-        style="
-          font-size: 2.5rem;
-          margin-bottom: 20px;
-          color: var(--primary-color);
-          background-color: rgba(74, 111, 227, 0.1);
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          border-radius: 50%;
-          margin: 0 auto 25px;
-        "
-      >
+    <div class="feature-card card-1">
+      <div class="feature-icon">
         <i class="fas fa-lock"></i>
       </div>
-      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+      <h3
+        style="font-size: 1.4rem; margin-bottom: 15px; color: var(--text-dark)"
+      >
         Secure Encryption
       </h3>
-      <p style="color: #4a5568; line-height: 1.6">
+      <p style="color: var(--text-medium); line-height: 1.6">
         Files are encrypted using industry-standard Fernet symmetric encryption
         for maximum security.
       </p>
     </div>
 
-    <div
-      class="feature-card"
-      style="
-        padding: 30px 20px;
-        border-radius: 12px;
-        background-color: #f8faff;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      "
-      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
-      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
-    >
-      <div
-        class="feature-icon"
-        style="
-          font-size: 2.5rem;
-          margin-bottom: 20px;
-          color: var(--primary-color);
-          background-color: rgba(74, 111, 227, 0.1);
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          border-radius: 50%;
-          margin: 0 auto 25px;
-        "
-      >
+    <div class="feature-card card-2">
+      <div class="feature-icon">
         <i class="fas fa-user-shield"></i>
       </div>
-      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+      <h3
+        style="font-size: 1.4rem; margin-bottom: 15px; color: var(--text-dark)"
+      >
         Privacy-Focused
       </h3>
-      <p style="color: #4a5568; line-height: 1.6">
+      <p style="color: var(--text-medium); line-height: 1.6">
         Your encryption keys never leave your device. We don't store your files
         or sensitive data.
       </p>
     </div>
 
-    <div
-      class="feature-card"
-      style="
-        padding: 30px 20px;
-        border-radius: 12px;
-        background-color: #f8faff;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      "
-      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
-      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
-    >
-      <div
-        class="feature-icon"
-        style="
-          font-size: 2.5rem;
-          margin-bottom: 20px;
-          color: var(--primary-color);
-          background-color: rgba(74, 111, 227, 0.1);
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          border-radius: 50%;
-          margin: 0 auto 25px;
-        "
-      >
+    <div class="feature-card card-3">
+      <div class="feature-icon">
         <i class="fas fa-bolt"></i>
       </div>
-      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+      <h3
+        style="font-size: 1.4rem; margin-bottom: 15px; color: var(--text-dark)"
+      >
         Fast & Reliable
       </h3>
-      <p style="color: #4a5568; line-height: 1.6">
+      <p style="color: var(--text-medium); line-height: 1.6">
         Quick encryption and decryption process with minimal overhead for
         efficient file security.
       </p>
     </div>
 
-    <div
-      class="feature-card"
-      style="
-        padding: 30px 20px;
-        border-radius: 12px;
-        background-color: #f8faff;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      "
-      onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 30px rgba(0, 0, 0, 0.1)';"
-      onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.05)';"
-    >
-      <div
-        class="feature-icon"
-        style="
-          font-size: 2.5rem;
-          margin-bottom: 20px;
-          color: var(--primary-color);
-          background-color: rgba(74, 111, 227, 0.1);
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          border-radius: 50%;
-          margin: 0 auto 25px;
-        "
-      >
+    <div class="feature-card card-4">
+      <div class="feature-icon">
         <i class="fas fa-desktop"></i>
       </div>
-      <h3 style="font-size: 1.4rem; margin-bottom: 15px; color: #2d3748">
+      <h3
+        style="font-size: 1.4rem; margin-bottom: 15px; color: var(--text-dark)"
+      >
         Easy to Use
       </h3>
-      <p style="color: #4a5568; line-height: 1.6">
+      <p style="color: var(--text-medium); line-height: 1.6">
         Simple, intuitive interface that makes encryption accessible to
         everyone, no technical expertise required.
       </p>
@@ -314,37 +445,26 @@ endblock %} {% block content %}
 </section>
 
 <section
-  class="how-it-works"
+  class="how-it-works section"
   style="
     padding: 50px 30px 70px;
     text-align: center;
-    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    background: var(--bg-gradient);
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--card-shadow);
   "
 >
   <h2
     style="
       font-size: 2.2rem;
       margin-bottom: 50px;
-      color: #2d3748;
+      color: var(--text-dark);
       position: relative;
       display: inline-block;
     "
+    class="underline-highlight"
   >
     How It Works
-    <span
-      style="
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        width: 80px;
-        height: 4px;
-        background-color: var(--primary-color);
-        transform: translateX(-50%);
-        border-radius: 2px;
-      "
-    ></span>
   </h2>
 
   <div
@@ -360,204 +480,90 @@ endblock %} {% block content %}
   >
     <!-- Connector line -->
     <div
+      class="connector-line"
       style="
         position: absolute;
         top: 40px;
         left: 50%;
         transform: translateX(-50%);
-        width: 80%;
+        width: 0;
         height: 4px;
         background-color: rgba(74, 111, 227, 0.2);
         z-index: 0;
+        transition: width 1.5s ease;
       "
     ></div>
 
-    <div
-      class="step"
-      style="
-        flex: 1;
-        min-width: 240px;
-        max-width: 300px;
-        padding: 20px;
-        position: relative;
-        z-index: 1;
-      "
-    >
-      <div
-        class="step-number"
-        style="
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          background-color: var(--primary-color);
-          color: white;
-          border-radius: 50%;
-          font-size: 1.8rem;
-          font-weight: bold;
-          margin: 0 auto 25px;
-          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
-        "
-      >
-        1
-      </div>
-      <div
-        class="step-content"
-        style="
-          background-color: white;
-          padding: 25px 20px;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-          height: 100%;
-        "
-      >
-        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+    <div class="step step-1">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3
+          style="
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
           Upload Your File
         </h3>
-        <p style="color: #4a5568; line-height: 1.6">
+        <p style="color: var(--text-medium); line-height: 1.6">
           Select any file you want to encrypt from your device with our simple
           drag-and-drop interface.
         </p>
       </div>
     </div>
 
-    <div
-      class="step"
-      style="
-        flex: 1;
-        min-width: 240px;
-        max-width: 300px;
-        padding: 20px;
-        position: relative;
-        z-index: 1;
-      "
-    >
-      <div
-        class="step-number"
-        style="
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          background-color: var(--primary-color);
-          color: white;
-          border-radius: 50%;
-          font-size: 1.8rem;
-          font-weight: bold;
-          margin: 0 auto 25px;
-          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
-        "
-      >
-        2
-      </div>
-      <div
-        class="step-content"
-        style="
-          background-color: white;
-          padding: 25px 20px;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-          height: 100%;
-        "
-      >
-        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+    <div class="step step-2">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3
+          style="
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
           Get Your Encryption Key
         </h3>
-        <p style="color: #4a5568; line-height: 1.6">
+        <p style="color: var(--text-medium); line-height: 1.6">
           Enclypt generates a unique secure key for your file that only you can
           access.
         </p>
       </div>
     </div>
 
-    <div
-      class="step"
-      style="
-        flex: 1;
-        min-width: 240px;
-        max-width: 300px;
-        padding: 20px;
-        position: relative;
-        z-index: 1;
-      "
-    >
-      <div
-        class="step-number"
-        style="
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          background-color: var(--primary-color);
-          color: white;
-          border-radius: 50%;
-          font-size: 1.8rem;
-          font-weight: bold;
-          margin: 0 auto 25px;
-          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
-        "
-      >
-        3
-      </div>
-      <div
-        class="step-content"
-        style="
-          background-color: white;
-          padding: 25px 20px;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-          height: 100%;
-        "
-      >
-        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+    <div class="step step-3">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3
+          style="
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
           Download Encrypted File
         </h3>
-        <p style="color: #4a5568; line-height: 1.6">
+        <p style="color: var(--text-medium); line-height: 1.6">
           Your file is now securely encrypted and ready to be stored or shared
           safely.
         </p>
       </div>
     </div>
 
-    <div
-      class="step"
-      style="
-        flex: 1;
-        min-width: 240px;
-        max-width: 300px;
-        padding: 20px;
-        position: relative;
-        z-index: 1;
-      "
-    >
-      <div
-        class="step-number"
-        style="
-          width: 80px;
-          height: 80px;
-          line-height: 80px;
-          background-color: var(--primary-color);
-          color: white;
-          border-radius: 50%;
-          font-size: 1.8rem;
-          font-weight: bold;
-          margin: 0 auto 25px;
-          box-shadow: 0 8px 20px rgba(74, 111, 227, 0.3);
-        "
-      >
-        4
-      </div>
-      <div
-        class="step-content"
-        style="
-          background-color: white;
-          padding: 25px 20px;
-          border-radius: 12px;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-          height: 100%;
-        "
-      >
-        <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #2d3748">
+    <div class="step step-4">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3
+          style="
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+          "
+        >
           Decrypt When Needed
         </h3>
-        <p style="color: #4a5568; line-height: 1.6">
+        <p style="color: var(--text-medium); line-height: 1.6">
           Use your key to decrypt the file whenever you need access to your
           original content.
         </p>
@@ -567,23 +573,82 @@ endblock %} {% block content %}
 
   <a
     href="{{ url_for('encrypt_page') }}"
-    style="
-      display: inline-block;
-      margin-top: 50px;
-      padding: 16px 32px;
-      background-color: var(--primary-color);
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 8px 15px rgba(74, 111, 227, 0.25);
-    "
+    class="btn btn-primary"
+    style="margin-top: 50px; padding: 16px 32px; box-shadow: var(--btn-shadow)"
   >
     <i class="fas fa-shield-alt" style="margin-right: 8px"></i>Start Encrypting
     Now
   </a>
 </section>
+
+<script>
+  // Intersection Observer for animations
+  document.addEventListener("DOMContentLoaded", function () {
+    // Animate hero section immediately
+    document.querySelector(".hero").classList.add("visible");
+    document.querySelector(".underline-highlight").classList.add("visible");
+
+    // Set up intersection observer for scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+
+            // Special handling for feature cards and steps
+            if (entry.target.classList.contains("features")) {
+              const cards = document.querySelectorAll(".feature-card");
+              cards.forEach((card, index) => {
+                setTimeout(() => {
+                  card.style.opacity = "0";
+                  card.style.transform = "translateY(20px)";
+                  card.style.animation = `fadeIn 0.6s ease forwards ${
+                    index * 0.2
+                  }s`;
+                }, 100);
+              });
+            }
+
+            if (entry.target.classList.contains("how-it-works")) {
+              // Animate connector line
+              const line = document.querySelector(".connector-line");
+              line.style.width = "80%";
+
+              // Animate steps sequentially
+              const steps = document.querySelectorAll(".step");
+              steps.forEach((step, index) => {
+                setTimeout(() => {
+                  step.classList.add("visible");
+                }, 500 + index * 300);
+              });
+            }
+
+            // Find and animate underlines
+            const underlines = entry.target.querySelectorAll(
+              ".underline-highlight"
+            );
+            underlines.forEach((underline) => {
+              underline.classList.add("visible");
+            });
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    // Observe sections
+    document.querySelectorAll(".section").forEach((section) => {
+      observer.observe(section);
+    });
+
+    // Add floating animation to hero image
+    const heroImage = document.querySelector(".hero-image img");
+    heroImage.style.animation = "floatUp 4s ease-in-out infinite";
+
+    // Add pulse animation to CTA button
+    const ctaButton = document.querySelector(".how-it-works .btn-primary");
+    ctaButton.style.animation = "pulse 2s ease-in-out infinite";
+  });
+</script>
 
 {% endblock %}
