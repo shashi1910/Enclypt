@@ -1,5 +1,5 @@
 # Project Enclypt
-![Repo Image](image.png)
+![Repo Image](screenshot.png)
 ## Overview
 
 This is a Flask-based web application that allows users to securely encrypt and decrypt files using the **Fernet** symmetric encryption algorithm. The app provides an intuitive web interface for file uploads, encryption, decryption, and secure downloads.
